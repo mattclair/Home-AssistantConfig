@@ -1,0 +1,3 @@
+  - name: join_matt_gs9
+    device_id: joinDeviceIdMattPhone
+    api_key: !secret joinAPI

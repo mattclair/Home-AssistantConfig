@@ -1,0 +1,82 @@
+####VIEWS (AKA TABS)
+Default_view:
+  name: home
+  view: yes
+  icon: mdi:home
+  entities:
+    - group.matt
+    - group.sheila
+    - group.lexi
+    - group.remote
+    - group.trash
+    - group.garage_doors
+#    - media_player.plexkodiconnect
+#    - media_player.kodiliving_room
+
+
+
+Family:
+  name: family
+  view: yes
+  entities:
+    - group.matt
+    - group.sheila
+    - group.lexi
+#    - device_tracker.matt_phone
+#    - device_tracker.sheila_phone
+
+
+Weather:
+  name: weather forecast
+  view: yes
+  entities:
+    #- group.environment
+    - input_boolean.weather
+    - camera.radar
+    #- weather.yweather
+
+
+####GROUPS (AKA CARDS)
+Matt:
+    - device_tracker.google_maps_111946808163369851965
+    - calendar.mattlclairgmailcom
+    - sensor.matt_event_title
+    - sensor.matt_event_start
+    - sensor.matt_event_end
+#    - device_tracker.mqttuser_mattgs9
+#    - device_tracker.matt_phone_bt
+#    - device_tracker.matt_phone
+Sheila:
+    - device_tracker.sheila_phone
+
+Lexi:
+    - device_tracker.lexi_phone
+
+garage_doors:
+      name: Garage Door
+      view: no
+      control: hidden
+      icon: mdi:garage
+      entities:
+        - cover.double
+
+Remote:
+#    - remote.living_room
+    - sensor.harmony_remote_activity
+    - input_select.remote
+    - input_number.denon_volume
+    - script.volume_up
+    - script.volume_down
+
+Environment:
+    #- weather.dark_sky
+    - sensor.yr_symbol
+    - sun.sun
+    #- sensor.dark_sky_icon
+    #- sensor.dark_sky_nearest_storm_distance
+    #- sensor.dark_sky_summary
+    #- sensor.darksky_forcast
+
+Trash:
+    - sensor.trash_pickup_day
+    - sensor.recycling_pickup_day

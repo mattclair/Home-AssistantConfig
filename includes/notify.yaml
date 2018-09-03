@@ -1,0 +1,19 @@
+  - name: Pushover
+    platform: pushover
+    api_key: !secret pushover_api_key
+    user_key: !secret pushover_user_key
+
+  - platform: joaoapps_join
+    device_id: group.all
+    name: all
+    api_key: !secret joinAPI
+
+  - platform: joaoapps_join
+    device_id: !secret joinDeviceIdMattPhone
+    name: mattGS9
+    api_key: !secret joinAPI
+    
+  - name: google_cloud_messaging
+    platform: html5
+    gcm_api_key: !secret google_cloud_messaging_aip_key
+    gcm_sender_id: !secret google_cloud_messaging_sender_id  

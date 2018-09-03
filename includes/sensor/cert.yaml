@@ -1,0 +1,2 @@
+  - platform: cert_expiry
+    host:  cfautomation.duckdns.org

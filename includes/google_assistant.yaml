@@ -1,0 +1,8 @@
+  project_id: !secret google_assistant_projectID
+  client_id: !secret google_assistant_clientID
+  access_token: !secret google_assistant_access_token
+  agent_user_id: !secret matt_email
+  api_key: !secret google_assistant_apiKey
+  exposed_domains:
+    - cover
+    - media_player

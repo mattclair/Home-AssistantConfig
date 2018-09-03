@@ -1,0 +1,29 @@
+    # Trash Tempalate Sensor
+  - platform: template
+    sensors:
+      trash_pickup_day:
+        friendly_name: Trash Pick-Up
+        value_template: >-
+          {%- set pickupday = strptime(states.calendar.trash_pick_up.attributes.start_time, "%Y-%m-%d %H:%M:%S").strftime("%Y-%m-%d") -%}
+          {%- if pickupday == states.sensor.date.state -%}
+            Today
+          {%- elif pickupday.split("-")[2] | int -1 == states.sensor.date.state.split("-")[2] | int -%}
+            Tomorrow
+          {% else %}
+            {{as_timestamp(states.calendar.trash_pick_up.attributes.start_time) | timestamp_custom("%A %B %d",true)}}
+          {% endif %}
+
+    # Recycling Tempalate Sensor
+  - platform: template
+    sensors:
+      recycling_pickup_day:
+        friendly_name: Recycleing Pick-Up
+        value_template: >-
+          {%- set pickupday = strptime(states.calendar.recycling_pick_up.attributes.start_time, "%Y-%m-%d %H:%M:%S").strftime("%Y-%m-%d") -%}
+          {%- if pickupday == states.sensor.date.state -%}
+            Today
+          {%- elif pickupday.split("-")[2] | int -1 == states.sensor.date.state.split("-")[2] | int -%}
+            Tomorrow
+          {% else %}
+            {{as_timestamp(states.calendar.recycling_pick_up.attributes.start_time) | timestamp_custom("%A %B %d",true)}}
+          {% endif %}

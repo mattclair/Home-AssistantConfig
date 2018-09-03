@@ -1,0 +1,6 @@
+    # Harmony Remote Status Tempalate Sensor
+  - platform: template
+    sensors:
+      harmony_remote_activity:
+        value_template: '{{ states.remote.living_room.attributes.current_activity }}'
+        friendly_name: 'Remote Activity'

@@ -1,0 +1,4 @@
+  configurator:
+    title: Configurator
+    icon: mdi:wrench
+    url: !secret configurator_url

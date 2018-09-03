@@ -1,0 +1,15 @@
+#  - platform: tplink
+#    host: 192.168.1.254
+#    username: !secret routerUser
+#    password: !secret routerPW
+  - platform: nmap_tracker
+    hosts: 192.168.1.100-253
+    consider_home: 600
+
+#  - platform: bluetooth_tracker
+#  - platform: owntracks
+  
+
+  - platform: google_maps
+    username: !secret google_maps_user
+    password: !secret google_maps_user_pw

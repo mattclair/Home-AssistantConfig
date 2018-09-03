@@ -1,0 +1,4 @@
+  - platform: harmony
+    name: Living Room
+    host: !secret harmony_ip
+    activity: Watch Kodi

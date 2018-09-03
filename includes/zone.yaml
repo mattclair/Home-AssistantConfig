@@ -1,0 +1,11 @@
+  - name: Work
+    latitude: !secret workLat
+    longitude: !secret workLong
+    radius: 400
+    icon: mdi:briefcase
+
+  - name: SWork
+    latitude: !secret sworkLat
+    longitude: !secret sworkLong
+    radius: 200
+    icon: mdi:briefcase

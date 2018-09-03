@@ -1,0 +1,16 @@
+    # Calendar Tempalate Sensor
+  - platform: template
+    sensors:
+      matt_event_title:
+        friendly_name: Event
+        value_template: "{{ states.calendar.mattlclairgmailcom.attributes.message }}"
+  - platform: template
+    sensors:
+      matt_event_start:
+        friendly_name: Start Time
+        value_template: "{{ states.calendar.mattlclairgmailcom.attributes.start_time }}"
+  - platform: template
+    sensors:
+      matt_event_end:
+        friendly_name: End Time
+        value_template: "{{ states.calendar.mattlclairgmailcom.attributes.end_time }}"

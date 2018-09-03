@@ -1,0 +1,69 @@
+##########################################################
+## Harmony Remote
+##########################################################
+
+volume_up:
+  alias: 'Volume Up'
+  sequence:
+    - service: rest_command.volume_up
+
+
+volume_down:
+  alias: 'Volume Down'
+  sequence:
+    - service: rest_command.volume_down
+
+turn_on_plex:
+  alias: "Start Plex Activity"
+  sequence:
+      service: remote.turn_on
+      data:
+        entity_id: remote.living_room
+        activity:
+            11883204
+turn_on_xbox:
+  alias: "Start XBox One Activity"
+  sequence:
+      service: remote.turn_on
+      data:
+        entity_id: remote.living_room
+        activity:
+            11870230
+turn_on_switch:
+  alias: "Start Nintendo Switch Activity"
+  sequence:
+      service: remote.turn_on
+      data:
+        entity_id: remote.living_room
+        activity:
+            35293083
+turn_off_tv:
+  alias: "Power Off TV"
+  sequence:
+      service: remote.turn_on
+      data:
+        entity_id: remote.living_room
+        activity:
+            -1
+
+
+
+
+input_select_harmony:
+  alias: "Start Remote activity from input select"
+  sequence:
+      service: remote.turn_on
+      data_template:
+        entity_id: remote.living_room
+        activity: >
+          {% if is_state("input_select.remote", "PowerOff") %}
+              -1
+          {% elif is_state("input_select.remote", "Watch Kodi") %}
+              11883204
+          {% elif is_state("input_select.remote", "Play Xbox One") %}
+              11870230
+          {% elif is_state("input_select.remote", "Listen to Music") %}
+              21533800
+          {% elif is_state("input_select.remote", "Play Nintendo Switch") %}
+              35293083    
+          {% endif %}

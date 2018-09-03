@@ -1,0 +1,9 @@
+  remote:
+    name: Media Center Remote
+    options:
+      - PowerOff
+      - Watch Kodi
+      - Play Xbox One
+      - Listen to Music
+      - Play Nintendo Switch
+    icon: mdi:remote

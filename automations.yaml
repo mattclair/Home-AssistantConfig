@@ -1,0 +1,229 @@
+- action:
+  - alias: Pushover
+    data:
+      data:
+        icon: https://goo.gl/xeetdy
+      message: Sheila is Home!
+      title: Home Assistant
+    service: notify.all
+  alias: Sheila is Home
+  condition: []
+  id: '1508100387389'
+  trigger:
+  - entity_id: device_tracker.sheila_phone
+    from: not_home
+    platform: state
+    to: home
+- action:
+  - alias: Pushover
+    data:
+      data:
+        icon: https://goo.gl/xeetdy
+      message: Sheila is Away
+      title: Home Assistant
+    service: notify.all
+  alias: Sheila is Away
+  condition: []
+  id: '1508111230955'
+  trigger:
+  - entity_id: device_tracker.sheila_phone
+    from: home
+    platform: state
+    to: not_home
+- id: '1508112507193'
+  alias: Family Away
+  trigger:
+  - entity_id: group.family
+    from: home
+    platform: state
+    to: not_home
+  condition: []
+  action:
+  - alias: remote
+    data:
+      entity_id: remote.living_room
+      service: remote.turn_off
+    service: remote.send_command
+  - data:
+      data:
+        icon: https://goo.gl/xeetdy
+      message: Nobody is home
+      title: Home Assistant
+    service: notify.mattgs9
+- id: '1359112557492'
+  alias: Denon Set Volume
+  trigger:
+  - entity_id: input_number.denon_volume
+    platform: state
+  action:
+  - data: {}
+    service: rest_command.set_volume
+- id: '1278239414347'
+  alias: Denon Get Volume
+  trigger:
+  - entity_id: sensor.denon_volume
+    platform: state
+  action:
+  - data_template:
+      entity_id: input_number.denon_volume
+      value: '{{ states.sensor.denon_volume.state | float }}'
+    service: input_number.set_value
+- id: '1518361748860'
+  alias: Denon Lower Volume
+  trigger:
+  - entity_id: sensor.denon_volume
+    platform: state
+  condition:
+  - above: '80'
+    condition: numeric_state
+    entity_id: sensor.denon_volume
+  action:
+  - delay: '5'
+  - alias: ''
+    data: {}
+    service: rest_command.volume_correct
+- id: '1519263645671'
+  alias: 'Reminder: Trash Pick-up'
+  trigger:
+  - entity_id: device_tracker.mqttuser_mattgs9
+    platform: state
+    to: home
+  condition:
+  - condition: template
+    value_template: "{%- set pickupday = strptime(states.calendar.trash_pick_up.attributes.start_time,\
+      \ \"%Y-%m-%d %H:%M:%S\").strftime(\"%Y-%m-%d\") -%}\n{%- if pickupday.split(\"\
+      -\")[2] | int -1 == states.sensor.date.state.split(\"-\")[2] | int -%}\n   \
+      \             true\n              {%- endif -%}"
+  action:
+  - data:
+      data:
+        icon: https://goo.gl/xeetdy
+        vibration: 0,65,706,86,657,95,668,100
+      message: Trash pick-up is tomorrow
+      title: Home Assistant
+    service: notify.all
+- id: '1519263819689'
+  alias: 'Reminder: Recycling Pick-up'
+  trigger:
+  - entity_id: device_tracker.mqttuser_mattgs9
+    platform: state
+    to: home
+  condition:
+  - condition: template
+    value_template: "{%- set pickupday = strptime(states.calendar.recycling_pick_up.attributes.start_time,\
+      \ \"%Y-%m-%d %H:%M:%S\").strftime(\"%Y-%m-%d\") -%}\n{%- if pickupday.split(\"\
+      -\")[2] | int -1 == states.sensor.date.state.split(\"-\")[2] | int -%}\n   \
+      \             true\n              {%- endif -%}"
+  action:
+  - data:
+      data:
+        icon: https://goo.gl/xeetdy
+        vibration: 0,65,706,86,657,95,668,100
+      message: Recycling pick-up is tomorrow
+      title: Home Assistant
+    service: notify.all
+- action:
+  - data_template:
+      entity_id: input_select.remote
+      option: '{{ states.remote.living_room.attributes.current_activity }}'
+    service: input_select.select_option
+  alias: Remote - Update Input Select from External Source
+  condition: []
+  id: '1519349569120'
+  trigger:
+  - entity_id: remote.living_room
+    platform: state
+- action:
+  - service: script.input_select_harmony
+  alias: Remote - Start Activity from Input Select
+  condition: []
+  id: '1519586698231'
+  trigger:
+  - entity_id: input_select.remote
+    platform: state
+- action:
+  - data:
+      entity_id: cover.double
+    service: cover.open_cover
+  alias: CarPresenceMatt_on
+  condition:
+  - condition: state
+    entity_id: cover.double
+    state: closed
+  id: '1525289140121'
+  trigger:
+  - entity_id: binary_sensor.mattcar
+    from: 'off'
+    platform: state
+    to: 'on'
+- id: '1525289339211'
+  alias: CarPresenceMatt_off
+  trigger:
+  - entity_id: binary_sensor.mattcar
+    from: 'on'
+    platform: state
+    to: 'off'
+    for:
+      minutes: 10
+  condition:
+  - condition: state
+    entity_id: cover.double
+    state: open
+  action:
+  - data:
+      entity_id: cover.double
+    service: cover.close_cover
+- action:
+  - data:
+      payload: OPEN
+      topic: sensor/garage/action2
+    service: mqtt.publish
+  - data:
+      data:
+        icon: https://goo.gl/xeetdy
+      message: The Garage Door was left open
+      title: Home Assistant
+    service: notify.mattgs9
+  alias: Garage Checker
+  condition:
+  - condition: state
+    entity_id: cover.double
+    state: open
+  id: '1525291938220'
+  trigger:
+  - entity_id: sun.sun
+    from: above_horizon
+    platform: state
+    to: below_horizon
+- id: '1534627488910'
+  alias: Cert Expiry Warning
+  trigger:
+  - below: '83'
+    entity_id: sensor.ssl_certificate_expiry
+    platform: numeric_state
+  condition: []
+  action:
+  - data:
+      data:
+        icon: https://goo.gl/xeetdy
+      message: Home Assistant cert will expire in {{ states.sensor.ssl_certificate_expiry.state
+        }} days
+      title: Hassio Cert Warning
+    service: notify.all
+- id: '1535922305145'
+  alias: New Automation
+  trigger:
+  - entity_id: device_tracker.google_maps_111946808163369851965
+    platform: state
+    to: Walmart
+  - entity_id: device_tracker.google_maps_111946808163369851965
+    platform: state
+    to: Neighborhood Market
+  condition: []
+  action:
+  - data:
+      data:
+        url: https://cfautomation.ducksns.org/shopping-list
+      message: I've sent you a shopping list
+      title: Shopping List
+    service: notify.google_cloud_messaging

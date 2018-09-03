@@ -1,0 +1,14 @@
+    # Denon Receiver Volume Template Sensor  
+  - platform: template
+    sensors:
+      denon_volume:
+        value_template: >
+          {% if is_state('media_player.denon_avrx1000', 'on')  %}
+            {% set n = states.media_player.denon_avrx1000.attributes.volume_level | float %}
+            {{ '%.1f'%( n*100.0|round(0.0) ) }}
+          {% else %}
+            "0"
+          {% endif %}
+        friendly_name: Reciever Volume Level
+        unit_of_measurement: "%"
+        icon_template: mdi:volume-medium

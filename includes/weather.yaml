@@ -1,0 +1,5 @@
+#  - platform: darksky
+#    api_key: !secret darkSkyAPI
+
+  - platform: yweather
+    woeid: !secret yweatherLocation

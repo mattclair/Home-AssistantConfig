@@ -1,0 +1,8 @@
+  denon_volume:
+    name: Media Volume
+    icon: mdi:volume-medium
+    initial: 0
+    min: 0
+    max: 100
+    step: 0.5
+    unit_of_measurement: "%"
