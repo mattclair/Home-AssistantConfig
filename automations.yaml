@@ -1,35 +1,35 @@
-- action:
-  - alias: Pushover
-    data:
-      data:
-        icon: https://goo.gl/xeetdy
-      message: Sheila is Home!
-      title: Home Assistant
-    service: notify.all
+- id: '1508100387389'
   alias: Sheila is Home
-  condition: []
-  id: '1508100387389'
   trigger:
   - entity_id: device_tracker.sheila_phone
     from: not_home
     platform: state
     to: home
-- action:
+  condition: []
+  action:
   - alias: Pushover
     data:
       data:
-        icon: https://goo.gl/xeetdy
-      message: Sheila is Away
+        url: https://cfautomation.duckdns.org
+      message: Sheila is Home
       title: Home Assistant
-    service: notify.all
+    service: notify.google_cloud_messaging_matts_phone
+- id: '1508111230955'
   alias: Sheila is Away
-  condition: []
-  id: '1508111230955'
   trigger:
   - entity_id: device_tracker.sheila_phone
     from: home
     platform: state
     to: not_home
+  condition: []
+  action:
+  - alias: Pushover
+    data:
+      data:
+        url: https://cfautomation.duckdns.org
+      message: Sheila is Away
+      title: Home Assistant
+    service: notify.google_cloud_messaging_matts_phone
 - id: '1508112507193'
   alias: Family Away
   trigger:
@@ -101,7 +101,7 @@
         vibration: 0,65,706,86,657,95,668,100
       message: Trash pick-up is tomorrow
       title: Home Assistant
-    service: notify.all
+    service: notify.google_cloud_messaging_matts_phone
 - id: '1519263819689'
   alias: 'Reminder: Recycling Pick-up'
   trigger:
@@ -121,7 +121,7 @@
         vibration: 0,65,706,86,657,95,668,100
       message: Recycling pick-up is tomorrow
       title: Home Assistant
-    service: notify.all
+    service: notify.google_cloud_messaging_matts_phone
 - action:
   - data_template:
       entity_id: input_select.remote
@@ -205,11 +205,11 @@
   action:
   - data:
       data:
-        icon: https://goo.gl/xeetdy
+        url: https://cfautomation.duckdns.org/hassio/dashboard
       message: Home Assistant cert will expire in {{ states.sensor.ssl_certificate_expiry.state
         }} days
       title: Hassio Cert Warning
-    service: notify.all
+    service: notify.google_cloud_messaging_matts_phone
 - id: '1535922305145'
   alias: New Automation
   trigger:
@@ -227,3 +227,37 @@
       message: I've sent you a shopping list
       title: Shopping List
     service: notify.google_cloud_messaging
+- id: '1536003304002'
+  alias: HTML5 Garage Door Notification Clicked
+  trigger:
+  - event_data:
+      action: close_door
+    event_type: html5_notification.clicked
+    platform: event
+  condition: []
+  action:
+  - data:
+      entity_id: cover.double
+    service: cover.open_cover
+- id: '1536003653612'
+  alias: Html5 Notification to Close the Garage Door
+  trigger:
+  - entity_id: binary_sensor.mattcar
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: cover.double
+    state: open
+  action:
+  - data:
+      data:
+        actions:
+        - action: close
+          icon: /static/icons/favicon-192x192.png
+          title: Open Home Assistant
+        - action: close_door
+          title: Close door
+      message: Should I Close the Garage Door?
+    service: notify.google_cloud_messaging_matts_phone
