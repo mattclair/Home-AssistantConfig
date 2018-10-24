@@ -1,0 +1,4 @@
+  - platform: command_line
+    name: shopping_list
+    command: python3 /config/shopping_list.py
+    scan_interval: 20

@@ -33,23 +33,20 @@
 - id: '1508112507193'
   alias: Family Away
   trigger:
-  - entity_id: group.family
-    from: home
+  - entity_id: group.all_devices
     platform: state
     to: not_home
   condition: []
   action:
-  - alias: remote
-    data:
-      entity_id: remote.living_room
-      service: remote.turn_off
-    service: remote.send_command
   - data:
       data:
-        icon: https://goo.gl/xeetdy
-      message: Nobody is home
+        url: https://cfautomation.duckdns.org
+      message: Nobody is Home
       title: Home Assistant
-    service: notify.mattgs9
+    service: notify.google_cloud_messaging_matts_phone
+  - data:
+      entity_id: remote.living_room
+    service: remote.turn_off
 - id: '1359112557492'
   alias: Denon Set Volume
   trigger:
@@ -85,7 +82,7 @@
 - id: '1519263645671'
   alias: 'Reminder: Trash Pick-up'
   trigger:
-  - entity_id: device_tracker.mqttuser_mattgs9
+  - entity_id: device_tracker.google_maps_111946808163369851965
     platform: state
     to: home
   condition:
@@ -94,6 +91,11 @@
       \ \"%Y-%m-%d %H:%M:%S\").strftime(\"%Y-%m-%d\") -%}\n{%- if pickupday.split(\"\
       -\")[2] | int -1 == states.sensor.date.state.split(\"-\")[2] | int -%}\n   \
       \             true\n              {%- endif -%}"
+  - condition: template
+    value_template: "{%- set pickupday = strptime(states.calendar.recycling_pick_up.attributes.start_time,\
+      \ \"%Y-%m-%d %H:%M:%S\").strftime(\"%Y-%m-%d\") -%}\n{%- if pickupday.split(\"\
+      -\")[2] | int -1 == states.sensor.date.state.split(\"-\")[2] | int -%}\n   \
+      \             false\n              {%- endif -%}"
   action:
   - data:
       data:
@@ -105,7 +107,7 @@
 - id: '1519263819689'
   alias: 'Reminder: Recycling Pick-up'
   trigger:
-  - entity_id: device_tracker.mqttuser_mattgs9
+  - entity_id: device_tracker.google_maps_111946808163369851965
     platform: state
     to: home
   condition:
@@ -119,7 +121,7 @@
       data:
         icon: https://goo.gl/xeetdy
         vibration: 0,65,706,86,657,95,668,100
-      message: Recycling pick-up is tomorrow
+      message: Trash and Recycling pick-up is tomorrow
       title: Home Assistant
     service: notify.google_cloud_messaging_matts_phone
 - action:
@@ -173,28 +175,29 @@
   - data:
       entity_id: cover.double
     service: cover.close_cover
-- action:
-  - data:
-      payload: OPEN
-      topic: sensor/garage/action2
-    service: mqtt.publish
-  - data:
-      data:
-        icon: https://goo.gl/xeetdy
-      message: The Garage Door was left open
-      title: Home Assistant
-    service: notify.mattgs9
-  alias: Garage Checker
+- id: '1525291938220'
+  alias: Garage Door Left Open at Night
+  trigger:
+  - minutes: /5
+    platform: time
+    seconds: 0
   condition:
   - condition: state
     entity_id: cover.double
     state: open
-  id: '1525291938220'
-  trigger:
-  - entity_id: sun.sun
-    from: above_horizon
-    platform: state
-    to: below_horizon
+  - after: sunset
+    condition: sun
+  action:
+  - data:
+      data:
+        actions:
+        - action: close
+          icon: /static/icons/favicon-192x192.png
+          title: Garage Door Notification
+        - action: close_door
+          title: Close door
+      message: Garage Door was left open at night
+    service: notify.google_cloud_messaging_matts_phone
 - id: '1534627488910'
   alias: Cert Expiry Warning
   trigger:
@@ -211,22 +214,30 @@
       title: Hassio Cert Warning
     service: notify.google_cloud_messaging_matts_phone
 - id: '1535922305145'
-  alias: New Automation
+  alias: Shopping Notification
   trigger:
   - entity_id: device_tracker.google_maps_111946808163369851965
-    platform: state
-    to: Walmart
+    event: enter
+    platform: zone
+    zone: zone.neighborhood_market
   - entity_id: device_tracker.google_maps_111946808163369851965
-    platform: state
-    to: Neighborhood Market
+    event: enter
+    platform: zone
+    zone: zone.walmart
   condition: []
   action:
   - data:
       data:
-        url: https://cfautomation.ducksns.org/shopping-list
+        renotify: '0'
+        tag: Shopping Notifiation
+        url: https://cfautomation.duckdns.org/shopping-list
+        vibrate:
+        - 300
+        - 100
+        - 400
       message: I've sent you a shopping list
       title: Shopping List
-    service: notify.google_cloud_messaging
+    service: notify.google_cloud_messaging_matts_phone
 - id: '1536003304002'
   alias: HTML5 Garage Door Notification Clicked
   trigger:
@@ -260,4 +271,156 @@
         - action: close_door
           title: Close door
       message: Should I Close the Garage Door?
+    service: notify.google_cloud_messaging_matts_phone
+- id: '1537368791217'
+  alias: Partial Backup Creation
+  trigger:
+  - at: '3:00:00'
+    platform: time
+  condition:
+  - condition: time
+    weekday:
+    - mon
+  action:
+  - data:
+      name: Automated Backup {{ now().strftime('%Y-%m-%d') }}
+    service: hassio.snapshot_partial
+  - data:
+      data:
+        url: https://cfautomation.duckdns.org/
+      message: Automated Backup {{ now().strftime('%Y-%m-%d') }} Created
+      title: Automated Backup
+    service: notify.google_cloud_messaging_matts_phone
+- id: '1537369552014'
+  alias: Partial Backup Upload
+  trigger:
+  - at: '4:00:00'
+    platform: time
+  condition:
+  - condition: time
+    weekday:
+    - mon
+  action:
+  - data:
+      addon: 7be23ff5_dropbox_sync
+      input:
+        command: upload
+    service: hassio.addon_stdin
+  - data:
+      data:
+        url: https://cfautomation.duckdns.org/
+      message: Automated Backup Pushed to Dropbox
+      title: Automated Backup
+    service: notify.google_cloud_messaging_matts_phone
+- id: '1538361242918'
+  alias: Server Status Sabnzbd
+  trigger:
+  - entity_id: sensor.sabnzbd
+    platform: state
+    to: 'OFF'
+  condition: []
+  action:
+  - data:
+      data:
+        url: https://cfautomation.duckdns.org
+      message: Sabnzbd Service is down
+      title: Server Status Notification
+    service: notify.google_cloud_messaging_matts_phone
+- id: '1538361347240'
+  alias: Server Status Plex
+  trigger:
+  - entity_id: sensor.plex
+    platform: state
+    to: 'OFF'
+  condition: []
+  action:
+  - data:
+      data:
+        url: https://cfautomation.duckdns.org
+      message: Plex Service is down
+      title: Server Status Notification
+    service: notify.google_cloud_messaging_matts_phone
+- id: '1538361402330'
+  alias: Server Status Radarr
+  trigger:
+  - entity_id: sensor.radarr
+    platform: state
+    to: 'OFF'
+  condition: []
+  action:
+  - data:
+      data:
+        url: https://cfautomation.duckdns.org
+      message: Radarr Service is down
+      title: Server Status Notification
+    service: notify.google_cloud_messaging_matts_phone
+- id: '1538361466349'
+  alias: Server Status Sonarr
+  trigger:
+  - entity_id: sensor.sonarr
+    platform: state
+    to: 'OFF'
+  condition: []
+  action:
+  - data:
+      data:
+        url: https://cfautomation.duckdns.org
+      message: Sonarr Service is down
+      title: Server Status Notification
+    service: notify.google_cloud_messaging_matts_phone
+- id: '1538361518875'
+  alias: Server Status Organizr
+  trigger:
+  - entity_id: sensor.organizr
+    from: 'ON'
+    platform: state
+  condition: []
+  action:
+  - data:
+      data:
+        url: https://cfautomation.duckdns.org
+      message: Organizr Service is down
+      title: Server Status Notification
+    service: notify.google_cloud_messaging_matts_phone
+- id: '1538361573324'
+  alias: Server Status Freenas
+  trigger:
+  - entity_id: sensor.freenas
+    platform: state
+    to: 'OFF'
+  condition: []
+  action:
+  - data:
+      data:
+        url: https://cfautomation.duckdns.org
+      message: Freenas Service is down
+      title: Server Status Notification
+    service: notify.google_cloud_messaging_matts_phone
+- id: '1538361615074'
+  alias: Server Status DNS
+  trigger:
+  - entity_id: sensor.dns
+    platform: state
+    to: 'OFF'
+  condition: []
+  action:
+  - data:
+      data:
+        url: https://cfautomation.duckdns.org
+      message: DNS Service is down
+      title: Server Status Notification
+    service: notify.google_cloud_messaging_matts_phone
+- id: '1539735543513'
+  alias: Server Status Lidarr
+  trigger:
+  - entity_id: sensor.lidarr
+    platform: state
+    to: 'OFF'
+  condition: []
+  action:
+  - data:
+      data:
+        url: https://cfautomation.duckdns.org
+      message: Lidarr Service is down
+      title: Server Status Notification
     service: notify.google_cloud_messaging_matts_phone

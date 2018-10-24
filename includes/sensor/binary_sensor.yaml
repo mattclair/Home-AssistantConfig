@@ -1,0 +1,39 @@
+  - platform:      command_line
+    name:          'sabnzbd'
+    command:       curl -m 3 -s http://192.168.1.21:8080/ > /dev/null && echo ON || echo OFF
+    scan_interval: 33
+    
+  - platform:      command_line
+    name:          'plex'
+    command:       curl -m 3 -s http://media_server.local/web/index.html/ > /dev/null && echo ON || echo OFF
+    scan_interval: 33    
+
+  - platform:      command_line
+    name:          'radarr'
+    command:       curl -m 3 -s http://192.168.1.30:7878/ > /dev/null && echo ON || echo OFF
+    scan_interval: 33  
+
+  - platform:      command_line
+    name:          'sonarr'
+    command:       curl -m 3 -s http://192.168.1.21:8080/ > /dev/null && echo ON || echo OFF
+    scan_interval: 33  
+
+  - platform:      command_line
+    name:          'lidarr'
+    command:       curl -m 3 -s http://192.168.1.27:8686/ > /dev/null && echo ON || echo OFF
+    scan_interval: 33  
+
+  - platform:      command_line
+    name:          'organizr'
+    command:       curl -m 3 -s http://192.168.1.25:80/ > /dev/null && echo ON || echo OFF
+    scan_interval: 33  
+
+  - platform:      command_line
+    name:          'freenas'
+    command:       curl -m 3 -s http://192.168.1.10:80/ > /dev/null && echo ON || echo OFF
+    scan_interval: 33  
+
+  - platform:      command_line
+    name:          'dns'
+    command:       curl -m 3 -s http://192.168.1.42:80/ > /dev/null && echo ON || echo OFF
+    scan_interval: 33      

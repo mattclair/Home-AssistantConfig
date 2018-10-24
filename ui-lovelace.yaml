@@ -6,6 +6,14 @@ resources:
     type: js
   - url: /local/custom_ui/vertical-stack-in-card.js?v=0.0.2
     type: js
+  - url: /local/custom_ui/beer-card.js
+    type: js
+  - url: /local/custom_ui/content-card-example.js
+    type: js
+  - url: /local/custom_ui/shopping-card.js
+    type: js
+  - url: /local/custom_ui/column-card.js
+    type: js
 title: Home
 background: center / cover no-repeat url("/local/bg.jpg") fixed
 views:
@@ -43,6 +51,18 @@ views:
         card:
           type: media-show_all_control
           entity: media_player.htpc
+      - type: vertical-stack
+        cards:
+        - type: glance
+          title: Server Health
+          entities:
+            - sensor.freenas
+            - sensor.plex
+            - sensor.sonarr
+            - sensor.radarr
+            - sensor.lidarr
+            - sensor.sabnzbd
+            - sensor.dns
       - type: custom:vertical-stack-in-card
         cards:
           - type: picture-elements
@@ -175,10 +195,9 @@ views:
         show_header_toggle: false
         entities:
           - cover.double
-      - type: iframe
-        url: https://cfautomation.duckdns.org/shopping-list
-        #title: Shopping List
-        aspect_ratio: 75%
+      - type: custom:shopping-card
+        title: Grocery List
+        entity: sensor.shopping_list
 
 
 
@@ -216,6 +235,6 @@ views:
         entity_weather: weather.yweather
         entity_sun: sun.sun
       - type: iframe
-        url: https://embed.windy.com/embed2.html?lat=38.665&lon=-90.012&zoom=10&level=surface&overlay=radar&menu=&message=true&marker=true&calendar=&pressure=true&type=map&location=coordinates&detail=&detailLat=47.267&detailLon=11.400&metricWind=default&metricTemp=%C2%B0F&radarRange=-1
+        url: !secret weather_url
         title: Weather radar
         aspect_ratio: 75%

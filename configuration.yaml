@@ -94,3 +94,5 @@ cover: !include includes/cover.yaml
 media_player: !include includes/media_player.yaml
 
 joaoapps_join: !include includes/joaoapps_join.yaml
+
+recorder: !include includes/recorder.yaml
