@@ -83,7 +83,6 @@ input_number: !include includes/input_number.yaml
 
 input_select: !include includes/input_select.yaml
 
-input_boolean: !include includes/input_boolean.yaml
 
 rest_command: !include includes/rest_command.yaml
 

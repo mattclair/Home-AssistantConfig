@@ -10,7 +10,7 @@
   - alias: Pushover
     data:
       data:
-        url: https://cfautomation.duckdns.org
+        url: !secret ha_url
       message: Sheila is Home
       title: Home Assistant
     service: notify.google_cloud_messaging_matts_phone
@@ -26,7 +26,7 @@
   - alias: Pushover
     data:
       data:
-        url: https://cfautomation.duckdns.org
+        url: !secret ha_url
       message: Sheila is Away
       title: Home Assistant
     service: notify.google_cloud_messaging_matts_phone
@@ -40,7 +40,7 @@
   action:
   - data:
       data:
-        url: https://cfautomation.duckdns.org
+        url: !secret ha_url
       message: Nobody is Home
       title: Home Assistant
     service: notify.google_cloud_messaging_matts_phone
@@ -95,7 +95,7 @@
     value_template: "{%- set pickupday = strptime(states.calendar.recycling_pick_up.attributes.start_time,\
       \ \"%Y-%m-%d %H:%M:%S\").strftime(\"%Y-%m-%d\") -%}\n{%- if pickupday.split(\"\
       -\")[2] | int -1 == states.sensor.date.state.split(\"-\")[2] | int -%}\n   \
-      \             false\n              {%- endif -%}"
+      \             true\n  {% else %}\n   fasle\n              {%- endif -%}"
   action:
   - data:
       data:
@@ -208,7 +208,7 @@
   action:
   - data:
       data:
-        url: https://cfautomation.duckdns.org/hassio/dashboard
+        url: !secret ha_url_dash
       message: Home Assistant cert will expire in {{ states.sensor.ssl_certificate_expiry.state
         }} days
       title: Hassio Cert Warning
@@ -230,7 +230,7 @@
       data:
         renotify: '0'
         tag: Shopping Notifiation
-        url: https://cfautomation.duckdns.org/shopping-list
+        url: !secret ha_url_shopping
         vibrate:
         - 300
         - 100
@@ -287,7 +287,7 @@
     service: hassio.snapshot_partial
   - data:
       data:
-        url: https://cfautomation.duckdns.org/
+        url: !secret backup_url
       message: Automated Backup {{ now().strftime('%Y-%m-%d') }} Created
       title: Automated Backup
     service: notify.google_cloud_messaging_matts_phone
@@ -308,7 +308,7 @@
     service: hassio.addon_stdin
   - data:
       data:
-        url: https://cfautomation.duckdns.org/
+        url: !secret backup_url
       message: Automated Backup Pushed to Dropbox
       title: Automated Backup
     service: notify.google_cloud_messaging_matts_phone
@@ -322,7 +322,7 @@
   action:
   - data:
       data:
-        url: https://cfautomation.duckdns.org
+        url: !secret ha_url
       message: Sabnzbd Service is down
       title: Server Status Notification
     service: notify.google_cloud_messaging_matts_phone
@@ -336,7 +336,7 @@
   action:
   - data:
       data:
-        url: https://cfautomation.duckdns.org
+        url: !secret ha_url
       message: Plex Service is down
       title: Server Status Notification
     service: notify.google_cloud_messaging_matts_phone
@@ -350,7 +350,7 @@
   action:
   - data:
       data:
-        url: https://cfautomation.duckdns.org
+        url: !secret ha_url
       message: Radarr Service is down
       title: Server Status Notification
     service: notify.google_cloud_messaging_matts_phone
@@ -364,7 +364,7 @@
   action:
   - data:
       data:
-        url: https://cfautomation.duckdns.org
+        url: !secret ha_url
       message: Sonarr Service is down
       title: Server Status Notification
     service: notify.google_cloud_messaging_matts_phone
@@ -378,7 +378,7 @@
   action:
   - data:
       data:
-        url: https://cfautomation.duckdns.org
+        url: !secret ha_url
       message: Organizr Service is down
       title: Server Status Notification
     service: notify.google_cloud_messaging_matts_phone
@@ -392,7 +392,7 @@
   action:
   - data:
       data:
-        url: https://cfautomation.duckdns.org
+        url: !secret ha_url
       message: Freenas Service is down
       title: Server Status Notification
     service: notify.google_cloud_messaging_matts_phone
@@ -406,7 +406,7 @@
   action:
   - data:
       data:
-        url: https://cfautomation.duckdns.org
+        url: !secret ha_url
       message: DNS Service is down
       title: Server Status Notification
     service: notify.google_cloud_messaging_matts_phone
@@ -420,7 +420,7 @@
   action:
   - data:
       data:
-        url: https://cfautomation.duckdns.org
+        url: !secret ha_url
       message: Lidarr Service is down
       title: Server Status Notification
     service: notify.google_cloud_messaging_matts_phone

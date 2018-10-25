@@ -14,7 +14,7 @@ class WeatherCard extends HTMLElement {
     }
 
     const getUnit = function (measure) {
-      const lengthUnit = hass.config.core.unit_system.length;
+      const lengthUnit = hass.config.unit_system.length;
       switch (measure) {
         case 'air_pressure':
           return lengthUnit === 'km' ? 'hPa' : 'inHg';
@@ -23,7 +23,7 @@ class WeatherCard extends HTMLElement {
         case 'precipitation':
           return lengthUnit === 'km' ? 'mm' : 'in';
         default:
-          return hass.config.core.unit_system[measure] || '';
+          return hass.config.unit_system[measure] || '';
       }
     };
 
@@ -95,7 +95,7 @@ class WeatherCard extends HTMLElement {
       <div class="forecast clear">
           ${forecast.map(daily => `
               <div class="day">
-                  <span class="dayname">${(new Date(daily.datetime)).toString().split(' ')[0]}</span>
+                  <span class="dayname">${(new Date(daily.datetime)).toLocaleDateString((navigator.language) ? navigator.language : navigator.userLanguage, {weekday: 'short'}).split(' ')[0]}</span>
                   <br><i class="icon" style="background: none, url(/local/icons/weather_icons/animated/${weatherIcons[daily.condition]}.svg) no-repeat; background-size: contain;"></i>
                   <br><span class="highTemp">${daily.temperature}${getUnit('temperature')}</span>
                   <br><span class="lowTemp">${daily.templow}${getUnit('temperature')}</span>

@@ -53,10 +53,3 @@ sensor.internet_time:
 cover.double:
   device_class: garage
   friendly_name: Garage Door
-input_boolean.weather:
-  config:
-    sun: sun.sun
-    weather: weather.yweather
-  custom_ui_state_card: custom-weather-card
-  friendly_name: Weather Forecast
-  homebridge_name: Weather Forecast

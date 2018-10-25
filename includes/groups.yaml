@@ -26,16 +26,6 @@ Family:
 #    - device_tracker.sheila_phone
 
 
-Weather:
-  name: weather forecast
-  view: yes
-  entities:
-    #- group.environment
-    - input_boolean.weather
-    - camera.radar
-    #- weather.yweather
-
-
 ####GROUPS (AKA CARDS)
 Matt:
     - device_tracker.google_maps_111946808163369851965
