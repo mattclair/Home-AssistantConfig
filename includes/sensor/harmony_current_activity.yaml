@@ -2,5 +2,9 @@
   - platform: template
     sensors:
       harmony_remote_activity:
-        value_template: '{{ states.remote.living_room.attributes.current_activity }}'
-        friendly_name: 'Remote Activity'
+        value_template: >
+          {% if is_state("remote.living_room", 'on') %}
+            {{ states.remote.living_room.attributes.current_activity }}
+          {% else %}
+            PowerOff
+          {% endif %}

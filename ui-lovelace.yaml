@@ -14,11 +14,11 @@ resources:
     type: js
   - url: /local/custom_ui/column-card.js
     type: js
+  - url: /local/custom-lovelace/upcoming-media-card/upcoming-media-card.js?v=0.1.3
+    type: js  
 title: Home
-background: center / cover no-repeat url("/local/bg.jpg") fixed
 views:
   - title: home
-    theme: transparent_pannel
     icon: mdi:home
     cards:
       - type: entity-filter
@@ -43,32 +43,22 @@ views:
           #- input_number.denon_volume
           #- script.volume_up
           #- script.volume_down
-      - type: entity-filter
-        entities:
-          - media_player.htpc
-        state_filter:
-          - 'playing'
-        card:
-          type: media-show_all_control
-          entity: media_player.htpc
-      - type: vertical-stack
-        cards:
-        - type: glance
-          title: Server Health
-          entities:
-            - sensor.freenas
-            - sensor.plex
-            - sensor.sonarr
-            - sensor.radarr
-            - sensor.lidarr
-            - sensor.sabnzbd
-            - sensor.dns
+
+
+      - type: sensor
+        entity: sensor.shelly_ht_temp
+        name: Freezer Temperature
+        icon: mdi:thermometer
+        graph: line
+        detail: 1
+
       - type: custom:vertical-stack-in-card
         cards:
           - type: picture-elements
             #title: Remote
-            image: /local/icons/media_icons/LHarmonyBG.jpg
+            image: /local/icons/media_icons/LHarmonyBG_Dark.png
             aspect_ratio: 50%
+            title: Remote
             elements:
               - type: image
                 image: /local/icons/media_icons/power-logo.png
@@ -90,7 +80,7 @@ views:
                 image: /local/icons/media_icons/plex-logo.png
                 entity: sensor.harmony_remote_activity
                 state_image:
-                  'Watch Kodi': /local/icons/media_icons/plex-logo_active.png
+                  'SHEILD TV': /local/icons/media_icons/plex-logo_active.png
                 tap_action: call-service
                 service: script.turn_on_plex
                 style:
@@ -186,19 +176,70 @@ views:
               - input_number.denon_volume
       - type: entities
         title: Trash
-        show_header_toggle: true
+        show_header_toggle: false
         entities:
           - sensor.trash_pickup_day
           - sensor.recycling_pickup_day
-      - type: entities
-        title: Garage Door
-        show_header_toggle: false
-        entities:
-          - cover.double
-      - type: custom:shopping-card
-        title: Grocery List
-        entity: sensor.shopping_list
 
+      - type: horizontal-stack
+        cards:
+          - type: entity-button
+            entity: cover.double
+            name: Garage Door
+            tap_action:
+              action: call-service
+              service: cover.open_cover
+              service_data:
+                entity_id: cover.double
+              entity: cover.double
+
+          - type: entity-button
+            entity: script.send_shopping_list_via_sms
+            name: Send Shopping List
+            icon: mdi:cart
+            tap_action:
+              action: call-service
+              service: script.send_shopping_list_via_sms
+
+
+      - type: shopping-list
+        title: Shopping List
+
+
+      #- type: custom:shopping-card
+      #  title: Grocery List
+      #  entity: sensor.shopping_list
+
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: sensor
+                entity: sensor.freenas
+                name: Freenas
+                icon: mdi:server-network
+              - type: sensor
+                entity: sensor.plex
+                name: Plex
+                icon: mdi:server-network
+              - type: sensor
+                entity: sensor.sonarr
+                name: Sonarr
+                icon: mdi:server-network
+          - type: horizontal-stack
+            cards:
+              - type: sensor
+                entity: sensor.radarr
+                name: Radarr
+                icon: mdi:server-network
+              - type: sensor
+                entity: sensor.lidarr
+                name: Lidarr
+                icon: mdi:server-network
+              - type: sensor
+                entity: sensor.sabnzbd
+                name: Sabnzbd
+                icon: mdi:server-network
 
 
 
@@ -227,14 +268,12 @@ views:
         entities:
           - device_tracker.lexi_phone
 
+
+
+
+
   - title: weather
     theme: test
     cards:
-      - type: "custom:weather-card"
-        title: Forecast
-        entity_weather: weather.yweather
-        entity_sun: sun.sun
-      - type: iframe
-        url: !secret weather_url
-        title: Weather radar
-        aspect_ratio: 75%
+      - type: weather-forecast
+        entity: weather.dark_sky

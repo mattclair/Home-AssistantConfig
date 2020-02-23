@@ -1,97 +1,58 @@
-homeassistant:
-  # Name of the location where Home Assistant is running
-  name: Home
-  # Location required to calculate the time the sun rises and sets
-  latitude: !secret lat
-  longitude: !secret long
-  # Impacts weather/sunrise data (altitude above sea level in meters)
-  elevation: 170
-  # metric for Metric, imperial for Imperial
-  unit_system: imperial
-  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-  time_zone: America/Chicago
-  # Customization file
+homeassistant:  
   customize: !include customize.yaml
 
-# Enables the frontend
+
+#removing default_config and enebling only what i want
+#default_config:
+automation: !include automations.yaml
+cloud:
+config:
 frontend:
   extra_html_url:
     - /local/custom_ui/custom-weather-card.html
   extra_html_url_es5:
     - /local/custom_ui/custom-weather-card.html
   themes: !include includes/themes.yaml
-
-cloud:
-# Enables configuration UI
-config:
+  javascript_version: latest
+history:
+logbook:
+#map:
+mobile_app:
+person:
+script: !include scripts.yaml
+ssdp:
+sun:
+system_health:
+updater:
+zeroconf:
+zone: !include includes/zone.yaml
+#end default_config
 
 google_assistant: !include includes/google_assistant.yaml
-
-
 http:
-  api_password: !secret http_password
   ssl_certificate: /ssl/fullchain.pem
   ssl_key: /ssl/privkey.pem
   ip_ban_enabled: False
   login_attempts_threshold: 5
-
-updater:
-
 discovery:
-  ignore:
-    - roku
-
 conversation:
-
-history:
-
-logbook:
-
-sun:
-
-map:
-
 shopping_list:
-
+timer: !include includes/timer.yaml
 sensor: !include_dir_merge_list includes/sensor/
-
+binary_sensor: !include includes/binary_sensor.yaml
 weather: !include includes/weather.yaml
-
 camera: !include includes/camera.yaml
-
-tts: !include includes/tts.yaml
-
 group: !include includes/groups.yaml
-
-automation: !include automations.yaml
-
-script: !include includes/scripts.yaml
-
 remote: !include includes/remote.yaml
-
 device_tracker: !include includes/device_tracker.yaml
-
 notify: !include includes/notify.yaml
-
-mqtt: !include includes/mqtt.yaml
-
-zone: !include includes/zone.yaml
-
 google: !include includes/google.yaml
-
 input_number: !include includes/input_number.yaml
-
-input_select: !include includes/input_select.yaml
-
-
 rest_command: !include includes/rest_command.yaml
-
-panel_iframe: !include includes/panel_iframe.yaml
-
 cover: !include includes/cover.yaml
-
 media_player: !include includes/media_player.yaml
-
 joaoapps_join: !include includes/joaoapps_join.yaml
-
 recorder: !include includes/recorder.yaml
+shell_command: !include includes/shell_command.yaml
+switch: !include includes/switch.yaml
+

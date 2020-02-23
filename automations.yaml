@@ -1,57 +1,54 @@
 - id: '1508100387389'
-  alias: Sheila is Home
+  alias: 'Notification: Sheila is Home'
   trigger:
-  - entity_id: device_tracker.sheila_phone
+  - entity_id: person.sheila
     from: not_home
     platform: state
     to: home
   condition: []
   action:
-  - alias: Pushover
     data:
       data:
-        url: !secret ha_url
+        url: https://cfautomation.duckdns.org
       message: Sheila is Home
       title: Home Assistant
-    service: notify.google_cloud_messaging_matts_phone
+    service: notify.mobile_app_sm_g965u
 - id: '1508111230955'
-  alias: Sheila is Away
+  alias: 'Notification: Sheila is Away'
   trigger:
-  - entity_id: device_tracker.sheila_phone
+  - entity_id: person.sheila
     from: home
     platform: state
     to: not_home
   condition: []
   action:
-  - alias: Pushover
     data:
       data:
-        url: !secret ha_url
+        url: https://cfautomation.duckdns.org
       message: Sheila is Away
       title: Home Assistant
-    service: notify.google_cloud_messaging_matts_phone
+    service: notify.mobile_app_sm_g965u
 - id: '1508112507193'
-  alias: Family Away
+  alias: Turn off TV when nobody is home
   trigger:
-  - entity_id: group.all_devices
+  - entity_id: group.family
     platform: state
     to: not_home
   condition: []
   action:
   - data:
-      data:
-        url: !secret ha_url
-      message: Nobody is Home
-      title: Home Assistant
-    service: notify.google_cloud_messaging_matts_phone
-  - data:
+      activity: '-1'
       entity_id: remote.living_room
-    service: remote.turn_off
+    service: remote.turn_on
 - id: '1359112557492'
   alias: Denon Set Volume
   trigger:
   - entity_id: input_number.denon_volume
     platform: state
+  condition:
+  - condition: template
+    value_template: '{{ states(''sensor.denon_volume'') != states(''input_number.denon_volume'')
+      }}'
   action:
   - data: {}
     service: rest_command.set_volume
@@ -65,37 +62,19 @@
       entity_id: input_number.denon_volume
       value: '{{ states.sensor.denon_volume.state | float }}'
     service: input_number.set_value
-- id: '1518361748860'
-  alias: Denon Lower Volume
-  trigger:
-  - entity_id: sensor.denon_volume
-    platform: state
-  condition:
-  - above: '80'
-    condition: numeric_state
-    entity_id: sensor.denon_volume
-  action:
-  - delay: '5'
-  - alias: ''
-    data: {}
-    service: rest_command.volume_correct
 - id: '1519263645671'
-  alias: 'Reminder: Trash Pick-up'
+  alias: 'Notification: Trash Pick-up'
   trigger:
-  - entity_id: device_tracker.google_maps_111946808163369851965
+  - entity_id: group.matt
     platform: state
     to: home
   condition:
-  - condition: template
-    value_template: "{%- set pickupday = strptime(states.calendar.trash_pick_up.attributes.start_time,\
-      \ \"%Y-%m-%d %H:%M:%S\").strftime(\"%Y-%m-%d\") -%}\n{%- if pickupday.split(\"\
-      -\")[2] | int -1 == states.sensor.date.state.split(\"-\")[2] | int -%}\n   \
-      \             true\n              {%- endif -%}"
-  - condition: template
-    value_template: "{%- set pickupday = strptime(states.calendar.recycling_pick_up.attributes.start_time,\
-      \ \"%Y-%m-%d %H:%M:%S\").strftime(\"%Y-%m-%d\") -%}\n{%- if pickupday.split(\"\
-      -\")[2] | int -1 == states.sensor.date.state.split(\"-\")[2] | int -%}\n   \
-      \             true\n  {% else %}\n   fasle\n              {%- endif -%}"
+  - condition: state
+    entity_id: sensor.trash_pickup_tomorrow
+    state: 'true'
+  - condition: state
+    entity_id: sensor.recycling_pickup_tomorrow
+    state: 'false'
   action:
   - data:
       data:
@@ -103,19 +82,17 @@
         vibration: 0,65,706,86,657,95,668,100
       message: Trash pick-up is tomorrow
       title: Home Assistant
-    service: notify.google_cloud_messaging_matts_phone
+    service: notify.mobile_app_sm_g965u
 - id: '1519263819689'
-  alias: 'Reminder: Recycling Pick-up'
+  alias: 'Notification: Recycling Pick-up'
   trigger:
-  - entity_id: device_tracker.google_maps_111946808163369851965
+  - entity_id: group.matt
     platform: state
     to: home
   condition:
-  - condition: template
-    value_template: "{%- set pickupday = strptime(states.calendar.recycling_pick_up.attributes.start_time,\
-      \ \"%Y-%m-%d %H:%M:%S\").strftime(\"%Y-%m-%d\") -%}\n{%- if pickupday.split(\"\
-      -\")[2] | int -1 == states.sensor.date.state.split(\"-\")[2] | int -%}\n   \
-      \             true\n              {%- endif -%}"
+  - condition: state
+    entity_id: sensor.recycling_pickup_tomorrow
+    state: 'true'
   action:
   - data:
       data:
@@ -123,7 +100,7 @@
         vibration: 0,65,706,86,657,95,668,100
       message: Trash and Recycling pick-up is tomorrow
       title: Home Assistant
-    service: notify.google_cloud_messaging_matts_phone
+    service: notify.mobile_app_sm_g965u
 - action:
   - data_template:
       entity_id: input_select.remote
@@ -162,11 +139,10 @@
   alias: CarPresenceMatt_off
   trigger:
   - entity_id: binary_sensor.mattcar
+    for: 0:60:00
     from: 'on'
     platform: state
     to: 'off'
-    for:
-      minutes: 10
   condition:
   - condition: state
     entity_id: cover.double
@@ -175,75 +151,27 @@
   - data:
       entity_id: cover.double
     service: cover.close_cover
-- id: '1525291938220'
-  alias: Garage Door Left Open at Night
-  trigger:
-  - minutes: /5
-    platform: time
-    seconds: 0
-  condition:
-  - condition: state
-    entity_id: cover.double
-    state: open
-  - after: sunset
-    condition: sun
-  action:
-  - data:
-      data:
-        actions:
-        - action: close
-          icon: /static/icons/favicon-192x192.png
-          title: Garage Door Notification
-        - action: close_door
-          title: Close door
-      message: Garage Door was left open at night
-    service: notify.google_cloud_messaging_matts_phone
 - id: '1534627488910'
   alias: Cert Expiry Warning
   trigger:
-  - below: '83'
+  - below: '21'
     entity_id: sensor.ssl_certificate_expiry
     platform: numeric_state
   condition: []
   action:
   - data:
       data:
-        url: !secret ha_url_dash
+        url: https://cfautomation.duckdns.org/hassio/dashboard
       message: Home Assistant cert will expire in {{ states.sensor.ssl_certificate_expiry.state
         }} days
       title: Hassio Cert Warning
-    service: notify.google_cloud_messaging_matts_phone
-- id: '1535922305145'
-  alias: Shopping Notification
-  trigger:
-  - entity_id: device_tracker.google_maps_111946808163369851965
-    event: enter
-    platform: zone
-    zone: zone.neighborhood_market
-  - entity_id: device_tracker.google_maps_111946808163369851965
-    event: enter
-    platform: zone
-    zone: zone.walmart
-  condition: []
-  action:
-  - data:
-      data:
-        renotify: '0'
-        tag: Shopping Notifiation
-        url: !secret ha_url_shopping
-        vibrate:
-        - 300
-        - 100
-        - 400
-      message: I've sent you a shopping list
-      title: Shopping List
-    service: notify.google_cloud_messaging_matts_phone
+    service: notify.mobile_app_sm_g965u
 - id: '1536003304002'
-  alias: HTML5 Garage Door Notification Clicked
+  alias: 'Notification Handler: Close Garage Door Notification Clicked'
   trigger:
   - event_data:
       action: close_door
-    event_type: html5_notification.clicked
+    event_type: mobile_app_notification_action
     platform: event
   condition: []
   action:
@@ -251,7 +179,7 @@
       entity_id: cover.double
     service: cover.open_cover
 - id: '1536003653612'
-  alias: Html5 Notification to Close the Garage Door
+  alias: 'Notification: Close the Garage Door?'
   trigger:
   - entity_id: binary_sensor.mattcar
     from: 'off'
@@ -270,8 +198,10 @@
           title: Open Home Assistant
         - action: close_door
           title: Close door
+        priority: high
+        ttl: 86400
       message: Should I Close the Garage Door?
-    service: notify.google_cloud_messaging_matts_phone
+    service: notify.mobile_app_sm_g965u
 - id: '1537368791217'
   alias: Partial Backup Creation
   trigger:
@@ -287,10 +217,10 @@
     service: hassio.snapshot_partial
   - data:
       data:
-        url: !secret backup_url
+        url: https://cfautomation.duckdns.org/
       message: Automated Backup {{ now().strftime('%Y-%m-%d') }} Created
       title: Automated Backup
-    service: notify.google_cloud_messaging_matts_phone
+    service: notify.mobile_app_sm_g965u
 - id: '1537369552014'
   alias: Partial Backup Upload
   trigger:
@@ -308,10 +238,10 @@
     service: hassio.addon_stdin
   - data:
       data:
-        url: !secret backup_url
+        url: https://cfautomation.duckdns.org/
       message: Automated Backup Pushed to Dropbox
       title: Automated Backup
-    service: notify.google_cloud_messaging_matts_phone
+    service: notify.mobile_app_sm_g965u
 - id: '1538361242918'
   alias: Server Status Sabnzbd
   trigger:
@@ -322,10 +252,10 @@
   action:
   - data:
       data:
-        url: !secret ha_url
+        url: https://cfautomation.duckdns.org
       message: Sabnzbd Service is down
       title: Server Status Notification
-    service: notify.google_cloud_messaging_matts_phone
+    service: notify.mobile_app_sm_g965u
 - id: '1538361347240'
   alias: Server Status Plex
   trigger:
@@ -336,10 +266,10 @@
   action:
   - data:
       data:
-        url: !secret ha_url
+        url: https://cfautomation.duckdns.org
       message: Plex Service is down
       title: Server Status Notification
-    service: notify.google_cloud_messaging_matts_phone
+    service: notify.mobile_app_sm_g965u
 - id: '1538361402330'
   alias: Server Status Radarr
   trigger:
@@ -350,10 +280,10 @@
   action:
   - data:
       data:
-        url: !secret ha_url
+        url: https://cfautomation.duckdns.org
       message: Radarr Service is down
       title: Server Status Notification
-    service: notify.google_cloud_messaging_matts_phone
+    service: notify.mobile_app_sm_g965u
 - id: '1538361466349'
   alias: Server Status Sonarr
   trigger:
@@ -364,10 +294,10 @@
   action:
   - data:
       data:
-        url: !secret ha_url
+        url: https://cfautomation.duckdns.org
       message: Sonarr Service is down
       title: Server Status Notification
-    service: notify.google_cloud_messaging_matts_phone
+    service: notify.mobile_app_sm_g965u
 - id: '1538361518875'
   alias: Server Status Organizr
   trigger:
@@ -378,10 +308,10 @@
   action:
   - data:
       data:
-        url: !secret ha_url
+        url: https://cfautomation.duckdns.org
       message: Organizr Service is down
       title: Server Status Notification
-    service: notify.google_cloud_messaging_matts_phone
+    service: notify.mobile_app_sm_g965u
 - id: '1538361573324'
   alias: Server Status Freenas
   trigger:
@@ -392,10 +322,10 @@
   action:
   - data:
       data:
-        url: !secret ha_url
+        url: https://cfautomation.duckdns.org
       message: Freenas Service is down
       title: Server Status Notification
-    service: notify.google_cloud_messaging_matts_phone
+    service: notify.mobile_app_sm_g965u
 - id: '1538361615074'
   alias: Server Status DNS
   trigger:
@@ -406,10 +336,10 @@
   action:
   - data:
       data:
-        url: !secret ha_url
+        url: https://cfautomation.duckdns.org
       message: DNS Service is down
       title: Server Status Notification
-    service: notify.google_cloud_messaging_matts_phone
+    service: notify.mobile_app_sm_g965u
 - id: '1539735543513'
   alias: Server Status Lidarr
   trigger:
@@ -420,7 +350,104 @@
   action:
   - data:
       data:
-        url: !secret ha_url
+        url: https://cfautomation.duckdns.org
       message: Lidarr Service is down
       title: Server Status Notification
-    service: notify.google_cloud_messaging_matts_phone
+    service: notify.mobile_app_sm_g965u
+- id: '1525291938220'
+  alias: 'Notification: Garage Door Left Open'
+  trigger:
+  - entity_id: cover.double
+    for: 00:15:00
+    platform: state
+    to: Open
+  condition: []
+  action:
+  - data:
+      data:
+        actions:
+        - action: close
+          icon: /static/icons/favicon-192x192.png
+          title: Garage Door Notification
+        - action: close_door
+          title: Close door
+      message: Garage Door was left open at night
+    service: notify.mobile_app_sm_g965u
+- id: '1549846583175'
+  alias: 'Notification: Freezer Temp Warning'
+  trigger:
+  - above: '15'
+    entity_id: sensor.shelly_ht_temp
+    platform: numeric_state
+  condition: []
+  action:
+  - data:
+      data:
+        url: https://cfautomation.duckdns.org
+      message: Freezer Temperature is above 15 degrees
+      title: Freezer Temp Warning
+    service: notify.mobile_app_sm_g965u
+  - data:
+      message: 'Automated Message: Freezer Temperature is above 15 degrees!'
+      number: '6189788691'
+    service: notify.mobile_app_sm_g965u
+- id: '1570930192329'
+  alias: Auto Renew SSL Cert
+  trigger:
+  - below: '25'
+    entity_id: sensor.ssl_certificate_expiry
+    platform: numeric_state
+  condition: []
+  action:
+  - service: shell_command.renew_ssl
+- id: '1570930944748'
+  alias: 'Notification: Shelly Temp Sensor Battery Warning'
+  trigger:
+  - below: '15'
+    entity_id: sensor.shelly_ht_battery
+    platform: numeric_state
+  condition: []
+  action:
+  - data:
+      data:
+        url: https://cfautomation.duckdns.org/hassio/dashboard
+      message: Shelly Temp Sensor Battery is at {{ states.sensor.shelly_ht_battery.state
+        }}%
+      title: Battery Warning
+    service: notify.mobile_app_sm_g965u
+- id: '1571266818491'
+  alias: 'Notification: Alexis home from school'
+  description: Sends a text whenever Alexis gets home from school
+  trigger:
+  - entity_id: person.alexis
+    platform: state
+    to: home
+  condition:
+  - condition: state
+    entity_id: binary_sensor.workday_sensor
+    state: 'on'
+  - after: '15:00:00'
+    before: '17:00:00'
+    condition: time
+  action:
+  - data:
+      message: 'Automated Message: Alexis is home from school'
+      number: '6189788691'
+    service: joaoapps_join.mattgs9_send_sms
+  - data:
+      data:
+        url: https://cfautomation.duckdns.org
+      message: Start your homework please
+      title: Welcome Home
+    service: notify.mobile_app_sm_j337v
+- id: '1571495208036'
+  alias: Set theme at startup
+  description: Sets the HA theme to "Slate" at startup
+  trigger:
+  - event: start
+    platform: homeassistant
+  condition: []
+  action:
+  - data:
+      name: slate
+    service: frontend.set_theme

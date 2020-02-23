@@ -1,0 +1,6 @@
+  - platform: radarr_upcoming_media
+    api_key: !secret radarr_api
+    host: !secret radarr_ip
+    port: 7878
+    days: 120
+    theaters: false

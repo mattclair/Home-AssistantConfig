@@ -1,0 +1,78 @@
+  - platform: template
+    switches:
+        # ZONE 1 MEDIA SWITCH
+        zone_1:
+          value_template: "{{ is_state('media_player.denon_avr_x1000', 'on') }}"
+          turn_on:
+            service: media_player.turn_on
+            entity_id: media_player.denon_avr_x1000
+          turn_off:
+            service: media_player.turn_off
+            entity_id: media_player.denon_avr_x1000
+              
+                
+        # XBOX HARMONY ACTIVITY
+        xbox_one:
+          value_template: "{{ is_state_attr('remote.living_room', 'current_activity', 'Play XBox One') }}"
+          turn_on:
+            service: remote.turn_on
+            data:
+              entity_id: remote.living_room
+              activity: 'Play XBox One'
+          turn_off:
+            service: remote.turn_on
+            data:
+              entity_id: remote.living_room
+              activity: 'PowerOff'
+        
+                     
+                
+        # SWITCH HARMONY ACTIVITY
+        switch:
+          value_template: "{{ is_state_attr('remote.living_room', 'current_activity', 'Play Nintendo Switch') }}"
+          turn_on:
+            service: remote.turn_on
+            data:
+              entity_id: remote.living_room
+              activity: 'Play Nintendo Switch'
+          turn_off:
+            service: remote.turn_on
+            data:
+              entity_id: remote.living_room
+              activity: 'PowerOff'
+        
+        # SHIELD TV HARMONY ACTIVITY
+        shield_tv:
+          value_template: "{{ is_state_attr('remote.living_room', 'current_activity', 'SHIELD TV') }}"
+          turn_on:
+            service: remote.turn_on
+            data:
+              entity_id: remote.living_room
+              activity: 'SHIELD TV'
+          turn_off:
+            service: remote.turn_on
+            data:
+              entity_id: remote.living_room
+              activity: 'PowerOff'
+        
+        # AUDIO 1, USED FOR ECHO AND MUSIC ZONE 1
+        #audio_1:
+          #value_template: "{{ is_state_attr('media_player.yamaha_receiver', 'source', 'Echo') and is_state('switch.floating_outlet_switch', 'on') }}"
+          #turn_on:
+            #- service: switch.turn_on
+              #entity_id: switch.floating_outlet_switch
+            #- service: media_player.turn_on
+              #entity_id: media_player.yamaha_receiver
+            #- service: media_player.select_source
+              #data:
+                #entity_id: media_player.yamaha_receiver
+                #source: Echo
+            #- service: media_player.volume_set
+              #data:
+                #entity_id: media_player.yamaha_receiver
+                #volume_level: 0.7
+          #turn_off:
+            #- service: switch.turn_off
+              #entity_id: switch.floating_outlet_switch
+            #- service: media_player.turn_off
+              #entity_id: media_player.yamaha_receiver

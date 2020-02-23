@@ -1,0 +1,4 @@
+  - platform: plex_recently_added
+    token: !secret plex_token
+    host: !secret plex_ip
+    port: !secret plex_port

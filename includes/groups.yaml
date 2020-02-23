@@ -19,9 +19,9 @@ Family:
   name: family
   view: yes
   entities:
-    - group.matt
-    - group.sheila
-    - group.lexi
+    - person.matt
+    - person.sheila
+    - person.alexis
 #    - device_tracker.matt_phone
 #    - device_tracker.sheila_phone
 
@@ -29,10 +29,10 @@ Family:
 ####GROUPS (AKA CARDS)
 Matt:
     - device_tracker.google_maps_111946808163369851965
-    - calendar.mattlclairgmailcom
-    - sensor.matt_event_title
-    - sensor.matt_event_start
-    - sensor.matt_event_end
+#    - calendar.mattlclairgmailcom
+#    - sensor.matt_event_title
+#    - sensor.matt_event_start
+#    - sensor.matt_event_end
 #    - device_tracker.mqttuser_mattgs9
 #    - device_tracker.matt_phone_bt
 #    - device_tracker.matt_phone

@@ -7,3 +7,10 @@
 #    use_episode_art: true
 #    remove_unavailable_clients: true
 #    client_remove_interval: 600
+
+
+  - platform: denonavr
+    host: 192.168.1.90
+    name: Denon AVR-X1000
+    show_all_sources: false
+    timeout: 2

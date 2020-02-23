@@ -37,3 +37,29 @@
     name:          'dns'
     command:       curl -m 3 -s http://192.168.1.42:80/ > /dev/null && echo ON || echo OFF
     scan_interval: 33      
+    
+  - platform: template
+    sensors:
+      recycling_pickup_tomorrow:
+        friendly_name: "Recycling Pick-up is Tomorrow"
+        value_template: >-
+          {%- set pickupday = strptime(states.calendar.recycling_pick_up.attributes.start_time, "%Y-%m-%d %H:%M:%S").strftime("%Y-%m-%d") -%}
+          {%- if pickupday.split("-")[2] | int -1 == states.sensor.date.state.split("-")[2] | int -%}
+                true
+          {% else %}
+                false
+          {%- endif -%}
+          
+  - platform: template
+    sensors:
+      trash_pickup_tomorrow:
+        friendly_name: "Trash Pick-up is Tomorrow"
+        value_template: >-
+          {%- set pickupday = strptime(states.calendar.trash_pick_up.attributes.start_time, "%Y-%m-%d %H:%M:%S").strftime("%Y-%m-%d") -%}
+          {%- if pickupday.split("-")[2] | int -1 == states.sensor.date.state.split("-")[2] | int -%}
+                true
+          {% else %}
+                false
+          {%- endif -%}   
+
+ 

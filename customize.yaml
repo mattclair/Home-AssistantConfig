@@ -40,11 +40,11 @@ sensor.yr_symbol:
   hidden: true
 sensor.date:
   hidden: true
-sensor.date__time:
+sensor.date_time:
   hidden: true
 sensor.time:
   hidden: true
-sensor.time__date:
+sensor.time_date:
   hidden: true
 sensor.time_utc:
   hidden: true
@@ -52,4 +52,33 @@ sensor.internet_time:
   hidden: true
 cover.double:
   device_class: garage
-  friendly_name: Garage Door
+  homebridge_cover_type: garage_door
+  google_assistant: true
+  google_assistant_type: switch
+automation.server_status_dns:
+  icon: mdi:server-network
+automation.server_status_freenas:
+  icon: mdi:server-network
+automation.server_status_lidarr:
+  icon: mdi:server-network
+automation.server_status_organizr:
+  icon: mdi:server-network
+automation.server_status_plex:
+  icon: mdi:server-network
+automation.server_status_radarr:
+  icon: mdi:server-network
+automation.server_status_sabnzbd:
+  icon: mdi:server-network
+automation.server_status_sonarr:
+  icon: mdi:server-network
+person.sheila:
+  entity_picture: /local/sheila.jpg
+  picture_entity: /local/sheila.jpg
+person.alexis:
+  entity_picture: /local/lexi.jpg
+person.matt:
+  entity_picture: /local/matt.jpg
+device_tracker.galaxy_j3_v:
+  entity_picture: /local/lexi.jpg
+device_tracker.sm_j337v:
+  entity_picture: /local/lexi.jpg

@@ -1,0 +1,56 @@
+volume_up:
+  alias: Volume Up
+  sequence:
+  - service: rest_command.volume_up
+volume_down:
+  alias: Volume Down
+  sequence:
+  - service: rest_command.volume_down
+turn_on_plex:
+  alias: Start Plex Activity
+  sequence:
+  - data:
+      activity: 40847892
+      entity_id: remote.living_room
+    service: remote.turn_on
+turn_on_xbox:
+  alias: Start XBox One Activity
+  sequence:
+    service: remote.turn_on
+    data:
+      entity_id: remote.living_room
+      activity: 11870230
+turn_on_switch:
+  alias: Start Nintendo Switch Activity
+  sequence:
+    service: remote.turn_on
+    data:
+      entity_id: remote.living_room
+      activity: 35293083
+turn_off_tv:
+  alias: Power Off TV
+  sequence:
+    service: remote.turn_on
+    data:
+      entity_id: remote.living_room
+      activity: -1
+input_select_harmony:
+  alias: Start Remote activity from input select
+  sequence:
+    service: remote.turn_on
+    data_template:
+      entity_id: remote.living_room
+      activity: "{% if is_state(\"input_select.remote\", \"PowerOff\") %}\n    -1\n\
+        {% elif is_state(\"input_select.remote\", \"SHIELD TV\") %}\n    40847892\n\
+        {% elif is_state(\"input_select.remote\", \"Play Xbox One\") %}\n    11870230\n\
+        {% elif is_state(\"input_select.remote\", \"Play Nintendo Switch\") %}\n \
+        \   35293083\n{% endif %}\n"
+send_shopping_list_via_sms:
+  alias: Text Shopping List to Sheila
+  sequence:
+  - service: joaoapps_join.mattgs9_send_sms
+    data_template:
+      number: 6189788691
+      message: 'Shopping List:
+
+        {{ states(''sensor.shopping_list'') }}'

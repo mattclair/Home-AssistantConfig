@@ -6,10 +6,10 @@
     hosts: 192.168.1.100-253
     consider_home: 600
 
-#  - platform: bluetooth_tracker
+  - platform: bluetooth_tracker
 #  - platform: owntracks
-  
 
-  - platform: google_maps
-    username: !secret google_maps_user
-    password: !secret google_maps_user_pw
+
+#  - platform: google_maps
+#    username: !secret google_maps_user
+#    password: !secret google_maps_user_pw
