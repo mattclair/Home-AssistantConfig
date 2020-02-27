@@ -1,55 +1,19 @@
-calendar.recycling_pick_up:
-  hidden: true
-calendar.trash_pick_up:
-  hidden: true
-calendar.holidays_in_united_states:
-  hidden: true
-calendar.contacts:
-  hidden: true
 sensor.trash_pickup_day:
   friendly_name: Trash Pickup
   icon: mdi:delete
 sensor.recycling_pickup_day:
   friendly_name: Recycling Pickup
   icon: mdi:recycle
-calendar.mattlclairgmailcom:
-  hidden: true
 sensor.matt_event_title:
   icon: mdi:calendar
 sensor.matt_event_end:
   icon: none
 sensor.matt_event_start:
   icon: none
-sensor.denon_volume:
-  hidden: true
 script.volume_down:
   icon: mdi:volume-low
 script.volume_up:
   icon: mdi:volume-high
-sensor.harmony_remote_activity:
-  hidden: true
-script.input_select_harmony:
-  hidden: true
-group.remote:
-  control: hidden
-remote.living_room:
-  hidden: true
-media_player.denon_avrx1000:
-  hidden: true
-sensor.yr_symbol:
-  hidden: true
-sensor.date:
-  hidden: true
-sensor.date_time:
-  hidden: true
-sensor.time:
-  hidden: true
-sensor.time_date:
-  hidden: true
-sensor.time_utc:
-  hidden: true
-sensor.internet_time:
-  hidden: true
 cover.double:
   device_class: garage
   homebridge_cover_type: garage_door

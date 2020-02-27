@@ -25,7 +25,7 @@ sun:
 system_health:
 updater:
 zeroconf:
-zone: !include includes/zone.yaml
+#zone: !include includes/zone.yaml
 #end default_config
 
 google_assistant: !include includes/google_assistant.yaml
@@ -42,7 +42,6 @@ sensor: !include_dir_merge_list includes/sensor/
 binary_sensor: !include includes/binary_sensor.yaml
 weather: !include includes/weather.yaml
 camera: !include includes/camera.yaml
-group: !include includes/groups.yaml
 remote: !include includes/remote.yaml
 device_tracker: !include includes/device_tracker.yaml
 notify: !include includes/notify.yaml

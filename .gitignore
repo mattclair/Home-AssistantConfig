@@ -8,6 +8,7 @@
 !*.css
 !*.html
 !.gitignore
+/custom_components/**
 secrets.yaml
 known_devices.yaml
 google_calendars.yaml

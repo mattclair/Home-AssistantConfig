@@ -86,7 +86,7 @@
 - id: '1519263819689'
   alias: 'Notification: Recycling Pick-up'
   trigger:
-  - entity_id: group.matt
+  - entity_id: person.matt
     platform: state
     to: home
   condition:

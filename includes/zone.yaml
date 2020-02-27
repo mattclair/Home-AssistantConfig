@@ -1,17 +1,17 @@
-  - name: Matt Work
-    latitude: !secret workLat
-    longitude: !secret workLong
-    radius: 400
-    icon: mdi:briefcase
+  #- name: Matt Work
+    #latitude: !secret workLat
+    #longitude: !secret workLong
+    #radius: 400
+    #icon: mdi:briefcase
 
-  - name: Sheila Work
-    latitude: !secret sworkLat
-    longitude: !secret sworkLong
-    radius: 200
-    icon: mdi:briefcase
+  #- name: Sheila Work
+    #latitude: !secret sworkLat
+    #longitude: !secret sworkLong
+    #radius: 200
+    #icon: mdi:briefcase
 
-  - name: Alexis School
-    latitude: !secret aschoolLat
-    longitude: !secret aschoolLong
-    radius: 250
-    icon: mdi:bus-school
+  #- name: Alexis School
+    #latitude: !secret aschoolLat
+    #longitude: !secret aschoolLong
+    #radius: 250
+    #icon: mdi:bus-school
