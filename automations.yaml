@@ -12,7 +12,7 @@
         url: https://cfautomation.duckdns.org
       message: Sheila is Home
       title: Home Assistant
-    service: notify.mobile_app_sm_g965u
+    service: notify.mobile_app_sm_g986u
 - id: '1508111230955'
   alias: 'Notification: Sheila is Away'
   trigger:
@@ -27,7 +27,7 @@
         url: https://cfautomation.duckdns.org
       message: Sheila is Away
       title: Home Assistant
-    service: notify.mobile_app_sm_g965u
+    service: notify.mobile_app_sm_g986u
 - id: '1508112507193'
   alias: Turn off TV when nobody is home
   trigger:
@@ -82,7 +82,7 @@
         vibration: 0,65,706,86,657,95,668,100
       message: Trash pick-up is tomorrow
       title: Home Assistant
-    service: notify.mobile_app_sm_g965u
+    service: notify.mobile_app_sm_g986u
 - id: '1519263819689'
   alias: 'Notification: Recycling Pick-up'
   trigger:
@@ -100,7 +100,7 @@
         vibration: 0,65,706,86,657,95,668,100
       message: Trash and Recycling pick-up is tomorrow
       title: Home Assistant
-    service: notify.mobile_app_sm_g965u
+    service: notify.mobile_app_sm_g986u
 - action:
   - data_template:
       entity_id: input_select.remote
@@ -165,7 +165,7 @@
       message: Home Assistant cert will expire in {{ states.sensor.ssl_certificate_expiry.state
         }} days
       title: Hassio Cert Warning
-    service: notify.mobile_app_sm_g965u
+    service: notify.mobile_app_sm_g986u
 - id: '1536003304002'
   alias: 'Notification Handler: Close Garage Door Notification Clicked'
   trigger:
@@ -201,7 +201,7 @@
         priority: high
         ttl: 86400
       message: Should I Close the Garage Door?
-    service: notify.mobile_app_sm_g965u
+    service: notify.mobile_app_sm_g986u
 - id: '1537368791217'
   alias: Partial Backup Creation
   trigger:
@@ -220,7 +220,7 @@
         url: https://cfautomation.duckdns.org/
       message: Automated Backup {{ now().strftime('%Y-%m-%d') }} Created
       title: Automated Backup
-    service: notify.mobile_app_sm_g965u
+    service: notify.mobile_app_sm_g986u
 - id: '1537369552014'
   alias: Partial Backup Upload
   trigger:
@@ -241,7 +241,7 @@
         url: https://cfautomation.duckdns.org/
       message: Automated Backup Pushed to Dropbox
       title: Automated Backup
-    service: notify.mobile_app_sm_g965u
+    service: notify.mobile_app_sm_g986u
 - id: '1538361242918'
   alias: Server Status Sabnzbd
   trigger:
@@ -255,7 +255,7 @@
         url: https://cfautomation.duckdns.org
       message: Sabnzbd Service is down
       title: Server Status Notification
-    service: notify.mobile_app_sm_g965u
+    service: notify.mobile_app_sm_g986u
 - id: '1538361347240'
   alias: Server Status Plex
   trigger:
@@ -269,7 +269,7 @@
         url: https://cfautomation.duckdns.org
       message: Plex Service is down
       title: Server Status Notification
-    service: notify.mobile_app_sm_g965u
+    service: notify.mobile_app_sm_g986u
 - id: '1538361402330'
   alias: Server Status Radarr
   trigger:
@@ -283,7 +283,7 @@
         url: https://cfautomation.duckdns.org
       message: Radarr Service is down
       title: Server Status Notification
-    service: notify.mobile_app_sm_g965u
+    service: notify.mobile_app_sm_g986u
 - id: '1538361466349'
   alias: Server Status Sonarr
   trigger:
@@ -297,7 +297,7 @@
         url: https://cfautomation.duckdns.org
       message: Sonarr Service is down
       title: Server Status Notification
-    service: notify.mobile_app_sm_g965u
+    service: notify.mobile_app_sm_g986u
 - id: '1538361518875'
   alias: Server Status Organizr
   trigger:
@@ -311,7 +311,7 @@
         url: https://cfautomation.duckdns.org
       message: Organizr Service is down
       title: Server Status Notification
-    service: notify.mobile_app_sm_g965u
+    service: notify.mobile_app_sm_g986u
 - id: '1538361573324'
   alias: Server Status Freenas
   trigger:
@@ -325,7 +325,7 @@
         url: https://cfautomation.duckdns.org
       message: Freenas Service is down
       title: Server Status Notification
-    service: notify.mobile_app_sm_g965u
+    service: notify.mobile_app_sm_g986u
 - id: '1538361615074'
   alias: Server Status DNS
   trigger:
@@ -339,7 +339,7 @@
         url: https://cfautomation.duckdns.org
       message: DNS Service is down
       title: Server Status Notification
-    service: notify.mobile_app_sm_g965u
+    service: notify.mobile_app_sm_g986u
 - id: '1539735543513'
   alias: Server Status Lidarr
   trigger:
@@ -353,7 +353,7 @@
         url: https://cfautomation.duckdns.org
       message: Lidarr Service is down
       title: Server Status Notification
-    service: notify.mobile_app_sm_g965u
+    service: notify.mobile_app_sm_g986u
 - id: '1525291938220'
   alias: 'Notification: Garage Door Left Open'
   trigger:
@@ -372,7 +372,7 @@
         - action: close_door
           title: Close door
       message: Garage Door was left open at night
-    service: notify.mobile_app_sm_g965u
+    service: notify.mobile_app_sm_g986u
 - id: '1549846583175'
   alias: 'Notification: Freezer Temp Warning'
   trigger:
@@ -386,11 +386,11 @@
         url: https://cfautomation.duckdns.org
       message: Freezer Temperature is above 15 degrees
       title: Freezer Temp Warning
-    service: notify.mobile_app_sm_g965u
+    service: notify.mobile_app_sm_g986u
   - data:
       message: 'Automated Message: Freezer Temperature is above 15 degrees!'
       number: '6189788691'
-    service: notify.mobile_app_sm_g965u
+    service: notify.mobile_app_sm_g986u
 - id: '1570930192329'
   alias: Auto Renew SSL Cert
   trigger:
@@ -414,7 +414,7 @@
       message: Shelly Temp Sensor Battery is at {{ states.sensor.shelly_ht_battery.state
         }}%
       title: Battery Warning
-    service: notify.mobile_app_sm_g965u
+    service: notify.mobile_app_sm_g986u
 - id: '1571266818491'
   alias: 'Notification: Alexis home from school'
   description: Sends a text whenever Alexis gets home from school
