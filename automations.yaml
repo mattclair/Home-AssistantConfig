@@ -170,7 +170,7 @@
   alias: 'Notification Handler: Close Garage Door Notification Clicked'
   trigger:
   - event_data:
-      action: close_door
+      action: toggle_door
     event_type: mobile_app_notification_action
     platform: event
   condition: []
@@ -193,14 +193,9 @@
   - data:
       data:
         actions:
-        - action: close
-          icon: /static/icons/favicon-192x192.png
-          title: Open Home Assistant
-        - action: close_door
-          title: Close door
-        priority: high
-        ttl: 86400
-      message: Should I Close the Garage Door?
+        - action: toggle_door
+          title: Close Garage Door
+      message: Close the garage door?
     service: notify.mobile_app_sm_g986u
 - id: '1537368791217'
   alias: Partial Backup Creation
@@ -366,12 +361,9 @@
   - data:
       data:
         actions:
-        - action: close
-          icon: /static/icons/favicon-192x192.png
-          title: Garage Door Notification
-        - action: close_door
-          title: Close door
-      message: Garage Door was left open at night
+        - action: toggle_door
+          title: Close Garage Door
+      message: Garage door was left open!
     service: notify.mobile_app_sm_g986u
 - id: '1549846583175'
   alias: 'Notification: Freezer Temp Warning'
@@ -436,9 +428,10 @@
     service: joaoapps_join.mattgs9_send_sms
   - data:
       data:
-        url: https://cfautomation.duckdns.org
-      message: Start your homework please
-      title: Welcome Home
+        actions:
+        - action: toggle_door
+          title: Open Garage Door
+      message: Welcome Home Alexis
     service: notify.mobile_app_sm_j337v
 - id: '1571495208036'
   alias: Set theme at startup
