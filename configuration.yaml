@@ -54,4 +54,5 @@ joaoapps_join: !include includes/joaoapps_join.yaml
 recorder: !include includes/recorder.yaml
 shell_command: !include includes/shell_command.yaml
 switch: !include includes/switch.yaml
+group: !include includes/group.yaml
 

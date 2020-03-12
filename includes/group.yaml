@@ -1,0 +1,6 @@
+  family:
+    name: Family
+    entities:
+      - person.matt
+      - person.sheila
+      - person.alexis
